@@ -25,18 +25,18 @@ class Disjoint {
 			int ulp_u = findParent(u);
 			int ulp_v = findParent(v);
 			
-			if(rank[ulp_u] == rank[ulp_v]){
+			if(ulp_u == ulp_v){
 				return;
 			}
 			
 			if(rank[ulp_u] < rank[ulp_v]){
-				rank[ulp_u] = ulp_v;
+				parent[ulp_u] = ulp_v;
 			}
 			else if(rank[ulp_v] < rank[ulp_u]){
-				rank[ulp_v] = ulp_u;
+				parent[ulp_v] = ulp_u;
 			}
 			else{
-				rank[ulp_v] = ulp_u;
+				parent[ulp_v] = ulp_u;
 				rank[ulp_u]++;
 			}
 		}
