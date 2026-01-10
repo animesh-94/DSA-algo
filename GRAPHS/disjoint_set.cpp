@@ -1,62 +1,47 @@
-#include<bits/stdc++.h>
-using namespace std;
+class wunionfind {
+  public:
+    int *id, *sz;
+    int maxi;
 
-class Disjoint {
-	vector<int> rank, parent;
-	
-	public: 
-		Disjoint(int n) {
-			rank.resize(n+1, 0);
-			parent.resize(n+1);	
-			for(int i=0; i<=n; i++){
-				parent[i] = i;
-			}
-		}
-		
-		int findParent(int node){
-			if(node == parent[node]){
-				return node;
-			}
-			
-			return parent[node] = findParent(parent[node]);
-		}
-		
-		void unionByRank(int u, int v){
-			int ulp_u = findParent(u);
-			int ulp_v = findParent(v);
-			
-			if(ulp_u == ulp_v){
-				return;
-			}
-			
-			if(rank[ulp_u] < rank[ulp_v]){
-				parent[ulp_u] = ulp_v;
-			}
-			else if(rank[ulp_v] < rank[ulp_u]){
-				parent[ulp_v] = ulp_u;
-			}
-			else{
-				parent[ulp_v] = ulp_u;
-				rank[ulp_u]++;
-			}
-		}
+	//normal constructor initialization and assigning of parent value
+    wunionfind(int n = N) {
+        id = new int[n + 1];
+        sz = new int[n + 1];
+        for(int i = 0; i <= n; i++) {
+            id[i] = i;
+            sz[i] = 1;
+        }
+        maxi = 1;
+    }
+
+	function for finding the root of the given node
+    int root(int idx) {
+        int x = idx;
+        while(x != id[x]) {
+            id[x] = id[id[x]];
+            x = id[x];
+        }
+        return x;
+    }
+
+	//function for merging the values
+    bool uni(int a, int b) {
+        int x = root(a), y = root(b);
+        if(sz[x] < sz[y]) {
+            swap(x, y);
+        }
+        if (x != y) {
+            id[y] = x;
+            sz[x] += sz[y];
+            sz[y] = 0;
+            maxi = max(maxi, sz[x]);
+            return false;
+        }
+        return true;
+    }
+
+	//boolean function for the checking the parents are same
+    bool check(int a, int b) {
+        return (root(a) == root(b));
+    }
 };
-
-int main(){
-	Disjoint ds(7);
-	
-	ds.unionByRank(1, 2);
-	ds.unionByRank(2, 3);
-	ds.unionByRank(3, 4);
-	ds.unionByRank(4, 5);
-	ds.unionByRank(5, 6);
-	ds.unionByRank(6, 7);
-	
-	if(ds.findParent(3) == ds.findParent(4)){
-		cout<<"SAME"<<endl;
-	}
-	else{
-		cout<<"NOT SAME"<<endl;
-	}
-	return 0;
-}
