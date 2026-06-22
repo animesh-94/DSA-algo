@@ -17,6 +17,7 @@ void solve(){
         }
         
         j++, i++;
+        kmp[i] = j;
     }
     
     for(int k=0; k<=n; k++){
